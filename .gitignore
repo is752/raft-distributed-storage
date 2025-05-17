@@ -1,4 +1,5 @@
 *.log
+*.pid
 raft_state.json
 
 
