@@ -1,0 +1,11 @@
+{
+  "num_nodes": 5,
+  "base_port": 8001,
+  "host": "localhost",
+  "base_data_dir_parent": "data/cluster_run",
+  "base_log_dir_parent": "logs/cluster_run",
+  "python_executable": "python",
+  "run_server_script": "scripts/run_server.py",
+  "debug_logging": true,
+  "pid_dir": "pids/cluster_run"
+}

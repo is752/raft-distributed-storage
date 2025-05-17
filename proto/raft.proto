@@ -1,0 +1,64 @@
+// proto/raft.proto
+syntax = "proto3";
+
+package raft;
+
+// Service definition for Raft communication
+service RaftService {
+  // Invoked by candidates to gather votes.
+  rpc RequestVote (RequestVoteArgs) returns (RequestVoteReply) {}
+
+  // Invoked by leader to replicate log entries and provide heartbeats.
+  rpc AppendEntries (AppendEntriesArgs) returns (AppendEntriesReply) {}
+
+  // Placeholder for client interaction (we'll refine this later)
+  // Maybe move to a separate storage.proto later
+  rpc ExecuteCommand (ClientCommandRequest) returns (ClientCommandReply) {}
+}
+
+// ---- RequestVote RPC ----
+message RequestVoteArgs {
+  int64 term = 1;         // Candidate's term
+  int32 candidate_id = 2; // Candidate requesting vote
+  int64 last_log_index = 3; // Index of candidate's last log entry
+  int64 last_log_term = 4;  // Term of candidate's last log entry
+}
+
+message RequestVoteReply {
+  int64 term = 1;        // Current term, for candidate to update itself
+  bool vote_granted = 2; // True means candidate received vote
+}
+
+// ---- AppendEntries RPC ----
+message LogEntry {
+  int64 term = 1;
+  bytes command = 2; // The actual client command (e.g., PUT key value) serialized
+                     // We'll likely need a more structured command format later
+}
+
+message AppendEntriesArgs {
+  int64 term = 1;          // Leader's term
+  int32 leader_id = 2;     // So follower can redirect clients
+  int64 prev_log_index = 3; // Index of log entry immediately preceding new ones
+  int64 prev_log_term = 4;  // Term of prev_log_index entry
+  repeated LogEntry entries = 5; // Log entries to store (empty for heartbeat)
+  int64 leader_commit = 6; // Leader's commitIndex
+}
+
+message AppendEntriesReply {
+  int64 term = 1;       // Current term, for leader to update itself
+  bool success = 2;    // True if follower contained entry matching prevLogIndex/Term
+}
+
+// ---- Client Interaction Placeholder ----
+message ClientCommandRequest {
+   bytes command = 1; // Serialized client command (e.g., PUT key value)
+   string command_id = 2; // Unique ID for deduplication (optional but good)
+}
+
+message ClientCommandReply {
+  bool success = 1;
+  string leader_hint = 2; // Address of the current leader, if known
+  string message = 3;     // Error message or other info
+  bytes value = 4;        // value of the respective key
+}

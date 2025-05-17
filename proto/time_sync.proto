@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package distributed_fs;
+
+service TimeSyncService {
+  rpc GetTime (TimeRequest) returns (TimeReply);
+}
+
+message TimeRequest {
+  // Empty for now, could add fields if needed
+}
+
+message TimeReply {
+  double timestamp = 1; // UNIX timestamp (seconds since epoch)
+} 

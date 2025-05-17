@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "distributed_fs"
+version = "0.1.0"
+description = "A Fault-Tolerant Distributed File Storage System using Raft"
+requires-python = ">=3.8"
+# You can list dependencies here instead of requirements.txt if you prefer
+# dependencies = [
+#    "grpcio",
+#    "grpcio-tools",
+# ]
+
+[tool.setuptools.packages.find]
+where = ["src"]  # Tells setuptools to look for packages inside the 'src' directory
